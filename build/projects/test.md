@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ian Kilty's Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400;1,8..60,500;1,8..60,600&family=VT323&display=swap"
+        rel="stylesheet">
+    
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
+
+    <script>hljs.highlightAll();</script>
+    
+    <style>
+        html {
+            font-family: 'Source Serif 4', serif;
+        }
+
+        .contact-links {
+            border-bottom: solid 1px #F2F2F2;
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+            border-bottom-color: rgb(242, 242, 242);
+        }
+
+        .links {
+            font-size: 18px;
+            display: flex;
+        }
+
+        .links a {
+            padding-right: 10px;
+            color: black;
+        }
+
+        body {
+            background: #fff;
+        }
+
+        footer {
+            padding-top: 15px;
+            font-size: 17px;
+            justify-content: space-around;
+            display: flex;
+            padding-bottom: 120px;
+        }
+
+        a {
+            color: #000
+        }
+    </style>
+</head>
+
+<body id="main">
+    <main style="width:50%; margin:auto;">
+        <script>
+            var color = true;
+            var toggle_color = function () {
+                const main = document.getElementById("main")
+                if (color) {
+                    main.style.background = "#fff"
+                    main.style.color = "#000"
+                } else {
+                    main.style.background = "#1e2021"
+                    main.style.color = "rgb(193, 193, 193)"
+                }
+                color = !color
+            }
+        </script>
+        <h2 onclick="toggle_color()">Ian Kilty's Website</h2>
+        <div class="links" style="font-size: 17px;">
+            <a href="/">Home</a>
+            <a href="/blog">Blog</a>
+            <a href="/projects">Projects</a>
+            <a href="/notes">Notes</a>
+        </div>
+        <h1>Testing some more</h1>
+        <p><em>10/10/2023</em></p>
+        <p>
+            Tags:
+            <a href="">Tags</a>
+            <a href="">For</a>
+            <a href="">The</a>
+            <a href="">Article</a>
+        </p>
+        <article
+            style="font-size: 20px; line-height: 32px; text-rendering: optimizeLegibility; letter-spacing: -0.06px; margin-bottom: -9.2px;">
+            <p>Give em a test for blogs</p>
+
+<p>We need to test a little more</p>
+<p><span class="math display">\[\int x^2 \, dx = \frac{x^3}3 +C\]</span></p>
+<pre><code class="language-python">print(&quot;hello world&quot;)
+</code></pre>
+
+        </article>
+        <br>
+        <hr>
+        <footer>
+            <a href="#main">Back to the top</a>
+            <a href="">Github</a>
+            <a href="">Linkedin</a>
+            <a href="">Email</a>
+        </footer>
+    </main>
+</body>
+
+</html>_blank">Email</a>
+        </footer>
+    </main>
+</body>
+
+</html>l>
