@@ -15,6 +15,10 @@
             font-family: 'Source Serif 4', serif;
         }
 
+        .black {
+            color: #000;
+        }
+
         .contact-links {
             border-bottom: solid 1px #F2F2F2;
             border-bottom-width: 1px;
@@ -25,15 +29,12 @@
         .links {
             font-size: 18px;
             display: flex;
+            color: black;
         }
 
         .links a {
             padding-right: 10px;
             color: black;
-        }
-
-        body {
-            background: #fff;
         }
 
         footer {
@@ -45,7 +46,11 @@
         }
 
         a {
-            color: #000
+            color: black !important;
+        }
+
+        body {
+            background: #fff;
         }
     </style>
 </head>
@@ -67,7 +72,7 @@
             }
         </script>
         <h2 onclick="toggle_color()">Ian Kilty's Website</h2>
-        <div class="links" style="font-size: 17px;">
+        <div class="links black" style="font-size: 17px; text-decoration: none;">
             <a href="/">Home</a>
             <a href="/blog">Blog</a>
             <a href="/projects">Projects</a>
@@ -89,7 +94,7 @@
         <br>
         <hr>
         <footer>
-            <a href="#main">Back to the top</a>
+            <a href="">Back to the top</a>
             <a href="">Github</a>
             <a href="">Linkedin</a>
             <a href="">Email</a>
@@ -97,9 +102,4 @@
     </main>
 </body>
 
-</html>_blank">Email</a>
-        </footer>
-    </main>
-</body>
-
-</html>l>
+</html>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Ian Kilty's website</title>
+    <title>Ian Kilty's Website</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -26,6 +26,10 @@
             font-family: 'Source Serif 4', serif;
         }
 
+        .black {
+            color: #000;
+        }
+
         .contact-links {
             border-bottom: solid 1px #F2F2F2;
             border-bottom-width: 1px;
@@ -36,10 +40,24 @@
         .links {
             font-size: 18px;
             display: flex;
+            color: black;
         }
 
         .links a {
             padding-right: 10px;
+            color: black;
+        }
+
+        footer {
+            padding-top: 15px;
+            font-size: 17px;
+            justify-content: space-around;
+            display: flex;
+            padding-bottom: 120px;
+        }
+
+        a {
+            color: black !important;
         }
 
         body {
@@ -65,7 +83,7 @@
             }
         </script>
         <h2 onclick="toggle_color()">Ian Kilty's Website</h2>
-        <div class="links" style="font-size: 17px;">
+        <div class="links black" style="font-size: 17px; text-decoration: none;">
             <a href="/">Home</a>
             <a href="/blog">Blog</a>
             <a href="/projects">Projects</a>
@@ -89,13 +107,20 @@
         </article>
         <br>
         <hr>
-        <footer
-            style="padding-top: 15px; font-size: 17px; justify-content: space-around; display: flex; padding-bottom: 120px;">
-            <a href="" target="_blank">Back to the top</a>
-            <a href="" target="_blank">Github</a>
-            <a href="" target="_blank">Linkedin</a>
-            <a href="" target="_blank">Email</a>
+        <footer>
+            <a href="">Back to the top</a>
+            <a href="">Github</a>
+            <a href="">Linkedin</a>
+            <a href="">Email</a>
         </footer>
+    </main>
+</body>
+
+</html>        </footer>
+    </main>
+</body>
+
+</html>ooter>
     </main>
 </body>
 
