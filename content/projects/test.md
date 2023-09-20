@@ -5,7 +5,7 @@ tags: ["Testing", "Some", "More"]
 latex: true
 code: true
 ---
-Give em a test for blogs
+Give em a test for projects
 
 We need to test a little more
 

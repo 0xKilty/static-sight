@@ -19,7 +19,7 @@ import (
 
 func main() {
 	postOrderTraversal("./content")
-	updateIndex()
+	updateIndexAndTags()
 
 	os.Chdir("./build")
 
@@ -29,7 +29,7 @@ func main() {
 
 func hostBuild(port string) {
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("."))))
-	fmt.Println("Serving site on localhost:" + port);
+	fmt.Println("Serving site on localhost:" + port)
 	http.ListenAndServe(":" + port, nil)
 }
 
@@ -40,11 +40,6 @@ type articleEntry struct {
 	Tags     []string
 }
 
-type tag struct {
-	Name    string
-	Entries []articleEntry
-}
-
 type indexPage struct {
 	RecentPosts    string
 	RecentProjects string
@@ -53,6 +48,7 @@ type indexPage struct {
 type articlePage struct {
 	Title   string
 	Date    string
+	Tags    string
 	Content string
 	Latex   bool
 	Code    bool
@@ -63,6 +59,12 @@ type directoryPage struct {
 	Path    string
 	Content string
 	ReadMe  string
+}
+
+type tagPage struct {
+	Title   string
+	AllTags string
+	Content string
 }
 
 type frontMatter struct {
@@ -77,77 +79,104 @@ func removeDotMD(str string) string {
 	return strings.Replace(str, ".md", "", 1)
 }
 
-func addArticleEntryInOrder(slice []articleEntry, path string, title string, tags []string, date time.Time) []articleEntry {
+func addArticleEntryInOrder(slice []articleEntry, entry articleEntry) []articleEntry {
 	index := sort.Search(len(slice), func(i int) bool {
-		return !slice[i].Date.Before(date)
+		return !slice[i].Date.Before(entry.Date)
 	})
 
 	slice = append(slice, articleEntry{})
 	copy(slice[index+1:], slice[index:])
-	slice[index].Date = date
-	slice[index].FilePath = path
-	slice[index].Title = title
-	slice[index].Tags = tags
+	slice[index].Date = entry.Date
+	slice[index].FilePath = entry.FilePath
+	slice[index].Title = entry.Title
+	slice[index].Tags = entry.Tags
 
 	return slice
 }
 
-func add_limit_convert_html(recent_blogs []articleEntry, limit int) string {
-	blogs_content := ""
-	for i, e := range recent_blogs {
+func addLimitConvertHtml(recentPosts []articleEntry, limit int) string {
+	var blogContent string;
+	for i, e := range recentPosts {
 		if i == limit {
 			break
 		}
-		blogs_content += "<li><a href=\"" + removeDotMD(e.FilePath) + "\">" + e.Title + "</a> - <em>" + e.Date.Format("1/2/2006") + "</em></li>"
+		blogContent += "<li><a href=\"" + removeDotMD(e.FilePath) + "\">" + e.Title + "</a> - <em>" + e.Date.Format("1/2/2006") + "</em></li>"
 	}
-	return blogs_content
+	return blogContent
 }
 
-func updateIndex() {
-	recent_blogs := get_ordered_dates("blog")
-	recent_projects := get_ordered_dates("projects")
-	limit := 5
-	blogs_content := add_limit_convert_html(recent_blogs, limit)
-	projects_content := add_limit_convert_html(recent_projects, limit)
-
-	file_out, err := os.OpenFile("./build/index.html", os.O_RDWR|os.O_CREATE, 0755)
-	check(err)
-
-	home := indexPage{RecentPosts: blogs_content, RecentProjects: projects_content}
-
-	tmpl, err := template.ParseFiles("./templates/index_temp.html")
-	check(err)
-
-	tmpl.Execute(file_out, home)
-	check(err)
+func getAllTags(tagsMap map[string][]string) string {
+	var allTags string
+	for tagName := range tagsMap {
+		allTags += "&nbsp;<a href=\"tags/" + strings.ToLower(tagName) + "\">" + tagName + "</a>"
+	}
+	return allTags
 }
 
-func get_ordered_dates(folder string) []articleEntry {
-	blog_posts, err := os.ReadDir("./content/" + folder)
-	check(err)
-	var date_slice []articleEntry
-	for _, e := range blog_posts {
-		if e.Name() != "README" {
-			file, err := os.Open("./content/" + folder + "/" + e.Name())
+func getTagPageContent(tagEntries []string) string {
+	var tagPageContent string
+	for _, tagEntry := range tagEntries {
+		tagPageContent += "<p>" + tagEntry + "</p>"
+	}
+	return tagPageContent
+}
+
+func updateIndexAndTags() {
+	numberOfRecent := 5
+	tagsMap := make(map[string][]string)
+
+	recentBlogPosts, tagsMap := getFolderInfo("blog", tagsMap)
+	recentProjects, tagsMap := getFolderInfo("projects", tagsMap)
+
+	blogsContent := addLimitConvertHtml(recentBlogPosts, numberOfRecent)
+	projectsContent := addLimitConvertHtml(recentProjects, numberOfRecent)
+
+	fileOut := openOrCreateFile("./build/index.html")
+	index := indexPage{ RecentPosts: blogsContent, RecentProjects: projectsContent }
+	writeFileWithTemplate(fileOut, "./templates/index_temp.html", index)
+
+	if !checkExistsDir("./build/tags") { createDir("./build/tags") }
+
+	allTags := getAllTags(tagsMap)
+	
+	for tagName, tagEntries := range tagsMap {
+		tagPageContent := getTagPageContent(tagEntries)
+		tagHTMLFile := openOrCreateFile("./build/tags/" + strings.ToLower(tagName))
+		tagPageData := tagPage{ Title: tagName, AllTags: allTags, Content: tagPageContent }
+		writeFileWithTemplate(tagHTMLFile, "./templates/tags_temp.html", tagPageData)
+	}
+}
+
+func insertTag(tagsMap map[string][]string, entry articleEntry) map[string][]string {
+	for _, articleTag := range entry.Tags {
+		tagsMap[articleTag] = append(tagsMap[articleTag], entry.FilePath)
+	}
+	return tagsMap
+}
+
+func getFolderInfo(folder string, tagsMap map[string][]string) ([]articleEntry, map[string][]string) {
+	dir := readDir("./content/" + folder)
+	var articlesByDate []articleEntry 
+	for _, entry := range dir {
+		if entry.Name() != "README" {
+			file := readFile("./content/" + folder + "/" + entry.Name())
+			frontMatter, _ := parseFrontMatter(string(file))
+			date, err := time.Parse("1/2/2006", frontMatter.Date)
 			check(err)
-			contents, err := io.ReadAll(file)
-			check(err)
-			fm, _ := parseFrontMatter(string(contents))
-			check(err)
-			date, err := time.Parse("1/2/2006", fm.Date)
-			check(err)
-			date_slice = addArticleEntryInOrder(date_slice, "/"+folder+"/"+e.Name(), fm.Title, fm.Tags, date)
+			entry := articleEntry{ FilePath: "/" + folder + "/" + entry.Name(), Title: frontMatter.Title, Date: date, Tags: frontMatter.Tags }
+			articlesByDate = addArticleEntryInOrder(articlesByDate, entry)
+			tagsMap = insertTag(tagsMap, entry)
 		}
 	}
-	return date_slice
+	return articlesByDate, tagsMap
 }
 
 func getBuildDirPath(path string) string {
-	build_path := strings.Split(path, "/")
-	build_path[0] = "build"
-	build_path[1] = strings.ToLower(build_path[1])
-	build_string := "./" + strings.Join(build_path, "/")
-	return build_string
+	buildDirSlice := splitBySlash(path)
+	buildDirSlice[0] = "build"
+	buildDirSlice[1] = strings.ToLower(buildDirSlice[1])
+	buildDirString := "./" + strings.Join(buildDirSlice, "/")
+	return buildDirString
 }
 
 func checkExistsDir(dir string) bool {
@@ -171,7 +200,7 @@ func splitBySlash(str string) []string {
 }
 
 func readDir(path string) []fs.DirEntry {
-	files, err := os.ReadDir("./content/" + path)
+	files, err := os.ReadDir(path)
 	check(err)
 	return files;
 }
@@ -192,21 +221,9 @@ func openOrCreateFile(path string) *os.File {
 	return file
 }
 
-func formatEntryHTML(entry fs.DirEntry, localPath string) string {
-	contentFilePath := removeDotMD(entry.Name())
-	content := "<p><a href=\"/" + localPath + "/" + contentFilePath + "\" class=\"black\">"
-
-	// Make it bold if its a dir
-	if entry.IsDir() { 
-		contentFilePath = "<strong>" + contentFilePath + "</strong>" 
-	}
-	content += contentFilePath + "</a></p>\n"
-	return content
-}
-
 func getDirPageContent(contentPath string, localPath string) (string, string) {
 	var content, readmeContent string;
-	entries := readDir(localPath)
+	entries := readDir("./content/" + localPath)
 	for _, entry := range entries {
 		if entry.Name() == "README" {
 			fileContent := readFile(contentPath + "/" + entry.Name())
@@ -223,7 +240,6 @@ func getPathLinks(path string, caser cases.Caser) string {
 	pathLinks := "/"
 	for _, file := range strings.Split(path, "/") {
 		paths += "/" + file
-		fmt.Println(paths, file)
 		pathLinks += "<a href=\"" + paths + "\" class=\"black\">" + caser.String(file) + "</a>/"
 	}
 	return pathLinks
@@ -238,6 +254,24 @@ func writeFileWithTemplate(file *os.File, templatePath string, data interface{})
 
 func getMarkdown(bytes []byte) string {
 	return string(markdown.ToHTML(bytes, nil, nil))
+}
+
+func formatEntryHTML(entry fs.DirEntry, localPath string) string {
+	contentFilePath := removeDotMD(entry.Name())
+	content := "<p><a href=\"/" + localPath + "/" + contentFilePath + "\" class=\"black\">"
+	if entry.IsDir() { 
+		contentFilePath = "<strong>" + contentFilePath + "</strong>" 
+	}
+	content += contentFilePath + "</a></p>\n"
+	return content
+}
+
+func formatTagsHTML(tags []string) string {
+	var tagsString string
+	for _, tag := range tags {
+		tagsString += fmt.Sprintf("<a href=\"%s\">%s</a>&nbsp;", "/tags/" + strings.ToLower(tag), tag)
+	}
+	return tagsString
 }
 
 func postOrderTraversal(root string) error {
@@ -257,7 +291,6 @@ func postOrderTraversal(root string) error {
 			if !checkExistsDir(buildDirPath) { createDir(buildDirPath) }
 
 			content, readmeContent := getDirPageContent("./content/" + localPath, localPath)
-
 			dirIndexHTML := openOrCreateFile(buildDirPath + "/index.html")
 
 			caser := cases.Title(language.English)
@@ -278,10 +311,10 @@ func postOrderTraversal(root string) error {
 		frontMatter, frontMatterEnd := parseFrontMatter(string(file))
 
 		content := getMarkdown(file[frontMatterEnd:])
-		fileOut := openOrCreateFile(buildDirPath)
+		fileOut := openOrCreateFile(removeDotMD(buildDirPath))
 
-		articlePage := articlePage{ Title: frontMatter.Title, Date: frontMatter.Date, Content: content, Latex: frontMatter.Latex, Code: frontMatter.Code }
-
+		tags := formatTagsHTML(frontMatter.Tags)
+		articlePage := articlePage{ Title: frontMatter.Title, Tags: tags, Date: frontMatter.Date, Content: content, Latex: frontMatter.Latex, Code: frontMatter.Code }
 		writeFileWithTemplate(fileOut, "./templates/art_temp.html", articlePage)
 
 		return nil

@@ -81,11 +81,7 @@
         <h1>testing</h1>
         <p><em>9/20/2023</em></p>
         <p>
-            Tags:
-            <a href="">Tags</a>
-            <a href="">For</a>
-            <a href="">The</a>
-            <a href="">Article</a>
+            Tags: 
         </p>
         <article
             style="font-size: 20px; line-height: 32px; text-rendering: optimizeLegibility; letter-spacing: -0.06px; margin-bottom: -9.2px;">
@@ -99,14 +95,6 @@
             <a href="">Linkedin</a>
             <a href="">Email</a>
         </footer>
-    </main>
-</body>
-
-</html>        </footer>
-    </main>
-</body>
-
-</html>ooter>
     </main>
 </body>
 

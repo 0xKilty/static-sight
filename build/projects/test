@@ -92,15 +92,11 @@
         <h1>Testing some more</h1>
         <p><em>10/10/2023</em></p>
         <p>
-            Tags:
-            <a href="">Tags</a>
-            <a href="">For</a>
-            <a href="">The</a>
-            <a href="">Article</a>
+            Tags: <a href="/tags/testing">Testing</a>&nbsp;<a href="/tags/some">Some</a>&nbsp;<a href="/tags/more">More</a>&nbsp;
         </p>
         <article
             style="font-size: 20px; line-height: 32px; text-rendering: optimizeLegibility; letter-spacing: -0.06px; margin-bottom: -9.2px;">
-            <p>Give em a test for blogs</p>
+            <p>Give em a test for projects</p>
 
 <p>We need to test a little more</p>
 <p><span class="math display">\[\int x^2 \, dx = \frac{x^3}3 +C\]</span></p>
@@ -116,14 +112,6 @@
             <a href="">Linkedin</a>
             <a href="">Email</a>
         </footer>
-    </main>
-</body>
-
-</html>        </footer>
-    </main>
-</body>
-
-</html>ooter>
     </main>
 </body>
 
