@@ -36,6 +36,24 @@
             align-items: center;
         }
 
+        .arrow {
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            margin: 3px;
+        }
+
+        .right {
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+        }
+
+        .down {
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+        }
+
         footer {
             padding-top: 15px;
             font-size: 17px;
@@ -63,7 +81,7 @@
     <main style="width:50%; margin:auto;">
         <script>
             var color = true;
-            var toggle_color = function() {
+            var toggle_color = function () {
                 const main = document.getElementById("main")
                 if (color) {
                     main.style.background = "#fff"
@@ -73,6 +91,19 @@
                     main.style.color = "rgb(193, 193, 193)"
                 }
                 color = !color
+            }
+
+            var arrowClick = function (element) {
+                var orientation = element.classList[1]
+                if (orientation == "right") {
+                    element.classList.remove("right")
+                    element.classList.add("down")
+                    element.parentNode.parentNode.children[2].hidden = false
+                } else {
+                    element.classList.remove("down")
+                    element.classList.add("right")
+                    element.parentNode.parentNode.children[2].hidden = true
+                }
             }
         </script>
         <h2 onclick="toggle_color()">Ian Kilty's Website</h2>
@@ -84,13 +115,32 @@
         </div>
         <h1>Notes</h1>
         <p>/<a href="/notes" class="black">Notes</a>/</p>
-        <article style="font-size: 20px; text-rendering: optimizeLegibility; letter-spacing: -0.06px; margin-bottom: -9.2px;">
-            
-            content/notesnotes/READMEnotes/testnotes/test1notes/test1/content1notes/test1/folder1notes/test1/folder1/content2notes/test2notes/test2/READMEnotes/test2/content1
+        <article
+            style="font-size: 20px; text-rendering: optimizeLegibility; letter-spacing: -0.06px; margin-bottom: -9.2px;">
+            <p>
+                <div>
+                    <div style="display: inline-flex;"><i class="arrow right" onclick="arrowClick(this)"></i></div>&nbsp;<strong><a href="">Math</a></strong>
+                    <div style="padding-left: 15px;" hidden>
+                        <a href="" style="padding-left: 20px;">Algebraic Geometry</a><br>
+                        <div>
+                            <div style="display: inline-flex;"><i class="arrow right" onclick="arrowClick(this)"></i></div>&nbsp;<strong><a href="">Calculus</a></strong>
+                            <div style="padding-left: 15px;" hidden>
+                                <a href="" style="padding-left: 20px;">Algebraic Geometry</a><br>
+                                <div>
+                                    <div style="display: inline-flex;"><i class="arrow right" onclick="arrowClick(this)"></i></div>&nbsp;<strong><a href="">Calculus</a></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p>
+
+
         </article>
         <br>
         <hr>
-        <footer style="padding-top: 15px; font-size: 17px; justify-content: space-around; display: flex; padding-bottom: 120px;">
+        <footer
+            style="padding-top: 15px; font-size: 17px; justify-content: space-around; display: flex; padding-bottom: 120px;">
             <a href="">Back to the top</a>
             <a href="">Github</a>
             <a href="">Linkedin</a>
@@ -99,4 +149,4 @@
     </main>
 </body>
 
-</html>     
+</html>

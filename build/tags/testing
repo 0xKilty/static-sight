@@ -35,6 +35,13 @@
             color: black;
         }
 
+        .tags {
+            display: inline;
+            font-size: 14px;
+            text-align: center;
+            align-items: center;
+        }
+
         footer {
             padding-top: 15px;
             font-size: 17px;
@@ -79,12 +86,12 @@
         <h1>Tag: Testing</h1>
         <p>
             All Tags:
-            &nbsp;<a href="tags/testing">Testing</a>&nbsp;<a href="tags/some">Some</a>&nbsp;<a href="tags/more">More</a>
+            &nbsp;<a href="/tags/testing">Testing</a>&nbsp;<a href="/tags/some">Some</a>&nbsp;<a href="/tags/more">More</a>
         </p>
         <article
             style="font-size: 20px; line-height: 32px; text-rendering: optimizeLegibility; letter-spacing: -0.06px; margin-bottom: -9.2px;">
             <ul>
-                <p>/blog/test.md</p><p>/projects/test.md</p>
+                <li><a href="/blog/test.md">Testing in blog</a> - <em>10/10/2023</em>&nbsp;&nbsp;<div class="tags"><a href="/tags/testing">Testing</a>&nbsp;&nbsp;<a href="/tags/some">Some</a>&nbsp;&nbsp;<a href="/tags/more">More</a>&nbsp;&nbsp;</div></li><li><a href="/projects/test.md">Testing in projects</a> - <em>10/10/2023</em>&nbsp;&nbsp;<div class="tags"><a href="/tags/testing">Testing</a>&nbsp;&nbsp;<a href="/tags/some">Some</a>&nbsp;&nbsp;<a href="/tags/more">More</a>&nbsp;&nbsp;</div></li>
             </ul>
         </article>
         <br>

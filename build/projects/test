@@ -89,7 +89,7 @@
             <a href="/projects">Projects</a>
             <a href="/notes">Notes</a>
         </div>
-        <h1>Testing some more</h1>
+        <h1>Testing in projects</h1>
         <p><em>10/10/2023</em></p>
         <p>
             Tags: <a href="/tags/testing">Testing</a>&nbsp;<a href="/tags/some">Some</a>&nbsp;<a href="/tags/more">More</a>&nbsp;
@@ -113,6 +113,9 @@
             <a href="">Email</a>
         </footer>
     </main>
+</body>
+
+</html>   </main>
 </body>
 
 </html>

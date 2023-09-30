@@ -1,5 +1,5 @@
 ---
-title: Testing some more
+title: Testing in blog
 date: 10/10/2023
 tags: ["Testing", "Some", "More"]
 latex: true
