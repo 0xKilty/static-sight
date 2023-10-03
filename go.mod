@@ -1,6 +1,6 @@
 module github.com/0xKilty/static-sight
 
-go 1.21.0
+go 1.23
 
 require github.com/gomarkdown/markdown v0.0.0-20230716120725-531d2d74bc12
 

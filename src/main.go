@@ -18,8 +18,10 @@ import (
 )
 
 func main() {
+	clearBuild()
 	postOrderTraversal("./content")
 	updateIndexAndTags()
+	copyAssets()
 
 	os.Chdir("./build")
 
@@ -329,25 +331,16 @@ func formatTagsHTML(tags []string) string {
 	return tagsString
 }
 
-func getNotesDirPageContent(dirPath string, file os.File, depth int) (string, string) {
-	var content string;
-	files := readDir(dirPath)
-	for _, file := range files {
-		indent := strings.Repeat("&nbsp;", depth*4)
-		fileOrDir := file.Name()
-        if file.IsDir() {
-            fileOrDir = "<strong>" + fileOrDir + "</strong>"
-        }
-        
-        content += fmt.Sprintf("%s%s<br>\n", indent, fileOrDir)
-
-        if file.IsDir() {
-            subDir := filepath.Join(dirPath, file.Name())
-            getNotesDirPageContent(subDir, file, depth+1)
-        }
-
+func getNotesDirPageContent(dirPath string, depth int) (string, string) {
+	noteDir := readDir(dirPath)
+	for _, item := range noteDir {
+		fmt.Print(strings.Repeat("  ", depth))
+		fmt.Println(item.Name())
+		if item.IsDir() {
+			getNotesDirPageContent(dirPath + "/" + item.Name(), depth + 1)
+		}
 	}
-	return content, ""
+	return "content", ""
 }
 
 func postOrderTraversal(root string) error {
@@ -376,9 +369,7 @@ func postOrderTraversal(root string) error {
 				content, readmeContent = getRegularDirPageContent("./content/"+localPath, localPath)
 			} else {
 				if localPath == "notes" {
-					noteRoot, err := os.Open("./content/notes")
-					check(err)
-					content, readmeContent = getNotesDirPageContent("./content/notes", *noteRoot, 1)
+					content, readmeContent = getNotesDirPageContent("./content/notes", 1)
 				} else {
 					content, readmeContent = getNotesPageContent("./content/"+localPath, localPath)
 				}
@@ -438,6 +429,32 @@ func parseFrontMatter(content string) (frontMatter, int) {
 		}
 	}
 	return frontMatter, frontMatterEnd
+}
+
+func writeFile(file *os.File, content []byte) {
+	_, err := file.Write(content)
+	check(err)
+}
+
+func copyAssets() {
+	files := readDir("./templates")
+	for _, file := range files {
+		if file.IsDir() {
+			createDir("./build/" + file.Name())
+			dirFiles := readDir("./templates/" + file.Name())
+			for _, dirFile := range dirFiles {
+				fmt.Println(dirFile.Name())
+				assetContents := readFile("./templates/" + file.Name() + "/" + dirFile.Name())
+				fileOut := openOrCreateFile("./build/" + file.Name() + "/" + dirFile.Name())
+				writeFile(fileOut, assetContents)
+			}
+		}
+	}
+}
+
+func clearBuild() {
+	err := os.RemoveAll("./build")
+	check(err)
 }
 
 func check(err error) {

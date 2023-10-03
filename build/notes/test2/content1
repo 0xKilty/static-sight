@@ -3,44 +3,7 @@
 
 <head>
     <title>Ian Kilty's Website</title>
-    <style>
-        html {
-            font-family: 'Source Serif 4', serif;
-        }
-
-        .contact-links {
-            border-bottom: solid 1px #F2F2F2;
-            border-bottom-width: 1px;
-            border-bottom-style: solid;
-            border-bottom-color: rgb(242, 242, 242);
-        }
-
-        .links {
-            font-size: 18px;
-            display: flex;   
-        }
-
-        .links a {
-            padding-right: 10px;
-            color: black;
-        }
-
-        footer {
-            padding-top: 15px;
-            font-size: 17px;
-            justify-content: space-around;
-            display: flex;
-            padding-bottom: 120px;
-        }
-
-        a {
-            color: black;
-        }
-
-        body {
-            background: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -48,10 +11,38 @@
         rel="stylesheet">
 </head>
 
-<body id="main">
-    <main style="width:50%; margin:auto;">
-        <script>
-            var color = true;
+<body>
+    <main>
+        <script src="scripts/toggleColor.js"></script>
+        <h2 onclick="toggle_color()">Ian Kilty's Website</h2>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/blog">Blog</a>
+            <a href="/projects">Projects</a>
+            <a href="/notes">Notes</a>
+        </div>
+        <h1>Title</h1>
+        <p>
+            /something
+        </p>
+        <article>
+            <p>Give em a test for blogs</p>
+
+<p>We need to test a little more</p>
+<p><span class="math display">\[\int x^2 \, dx = \frac{x^3}3 +C\]</span></p>
+        </article>
+        <br>
+        <hr>
+        <footer>
+            <a href="">Back to the top</a>
+            <a href="">Github</a>
+            <a href="">Linkedin</a>
+            <a href="">Email</a>
+        </footer>
+    </main>
+</body>
+
+</html>= true;
             var toggle_color = function() {
                 const main = document.getElementById("main")
                 if (color) {
