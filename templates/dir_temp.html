@@ -3,7 +3,7 @@
 
 <head>
     <title>Ian Kilty's Website</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="/styles/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -13,20 +13,7 @@
 
 <body>
     <main>
-        <script>
-            var color = true;
-            var toggle_color = function() {
-                const main = document.getElementById("main")
-                if (color) {
-                    main.style.background = "#fff"
-                    main.style.color = "#000"
-                } else {
-                    main.style.background = "#1e2021"
-                    main.style.color = "rgb(193, 193, 193)"
-                }
-                color = !color
-            }
-        </script>
+        <script src="/scripts/toggleColor.js"></script>
         <h2 onclick="toggle_color()">Ian Kilty's Website</h2>
         <div class="links">
             <a href="/">Home</a>

@@ -15,10 +15,12 @@ import (
 	"strings"
 	"text/template"
 	"time"
+	"strconv"
 )
 
 func main() {
 	clearBuild()
+	createDir("./build")
 	postOrderTraversal("./content")
 	updateIndexAndTags()
 	copyAssets()
@@ -66,6 +68,12 @@ type directoryPage struct {
 	Title   string
 	Path    string
 	Content string
+	ReadMe  string
+}
+
+type noteDirectoryPage struct {
+	Content string
+	Path    string
 	ReadMe  string
 }
 
@@ -159,7 +167,7 @@ func updateIndexAndTags() {
 	index := indexPage{RecentPosts: blogsContent, RecentProjects: projectsContent}
 	writeFileWithTemplate(fileOut, "./templates/index_temp.html", index)
 
-	if !checkExistsDir("./build/tags") {
+	if !checkExists("./build/tags") {
 		createDir("./build/tags")
 	}
 
@@ -205,7 +213,7 @@ func getBuildDirPath(path string) string {
 	return buildDirString
 }
 
-func checkExistsDir(dir string) bool {
+func checkExists(dir string) bool {
 	_, err := os.Stat(dir)
 	return err == nil
 }
@@ -331,24 +339,38 @@ func formatTagsHTML(tags []string) string {
 	return tagsString
 }
 
-func getNotesDirPageContent(dirPath string, depth int) (string, string) {
+func getNotesDirPageContent(dirPath string) (string, string) {
+	var readmeContent string
+	if checkExists(dirPath + "/README") {
+		readmeContent = getMarkdown(readFile(dirPath + "/README"))
+	}
+	return getFileStructureHTML(dirPath, 1), readmeContent
+}
+
+func getFileStructureHTML(dirPath string, depth int) string {
+	var content string
 	noteDir := readDir(dirPath)
+	arrowPadding := strconv.Itoa(((depth - 1) * 7) + 15)
+	normalPadding := strconv.Itoa(((depth) * 7) + 15)
 	for _, item := range noteDir {
-		fmt.Print(strings.Repeat("  ", depth))
-		fmt.Println(item.Name())
 		if item.IsDir() {
-			getNotesDirPageContent(dirPath + "/" + item.Name(), depth + 1)
+			content += "<div><div class=\"dirName\"><i class=\"arrow right\" onclick=\"arrowClick(this)\"></i></div>&nbsp;<strong><a href=\"\">"
+			content += item.Name()
+			content += fmt.Sprintf("</a></strong><div style=\"padding-left: %spx;\" hidden>", normalPadding)
+			innerContent := getFileStructureHTML(dirPath + "/" + item.Name(), depth + 1)
+			content += innerContent
+			content += "</div></div>"
+		} else if item.Name() != "README" {
+			url := "/" + strings.Join(splitBySlash(dirPath)[2:], "/") + "/" + removeDotMD(item.Name())
+			content += fmt.Sprintf("<a href=\"%s\" style=\"padding-left: %spx;\">%s</a><br>", url, arrowPadding, removeDotMD(item.Name()))
 		}
 	}
-	return "content", ""
+	return content
 }
 
 func postOrderTraversal(root string) error {
 	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
+		check(err)
 		buildDirPath := getBuildDirPath(path)
 		localPath := getLocalPath(buildDirPath)
 		pathSlice := splitBySlash(buildDirPath)
@@ -360,24 +382,29 @@ func postOrderTraversal(root string) error {
 				return nil
 			}
 
-			if !checkExistsDir(buildDirPath) {
+			if !checkExists(buildDirPath) {
 				createDir(buildDirPath)
 			}
+
+			caser := cases.Title(language.English)
 
 			var content, readmeContent string
 			if topDirectory == "blog" || topDirectory == "projects" {
 				content, readmeContent = getRegularDirPageContent("./content/"+localPath, localPath)
 			} else {
 				if localPath == "notes" {
-					content, readmeContent = getNotesDirPageContent("./content/notes", 1)
+					content, readmeContent = getNotesDirPageContent("./content/notes")
+					dirIndexHTML := openOrCreateFile(buildDirPath + "/index.html")
+					pathLinks := getPathLinks(localPath, caser)
+					currentPage := noteDirectoryPage{Content: content, Path: pathLinks, ReadMe: readmeContent}
+					writeFileWithTemplate(dirIndexHTML, "./templates/note_dir_temp.html", currentPage)
+					return nil
 				} else {
 					content, readmeContent = getNotesPageContent("./content/"+localPath, localPath)
 				}
 			}
 
 			dirIndexHTML := openOrCreateFile(buildDirPath + "/index.html")
-
-			caser := cases.Title(language.English)
 			pathLinks := getPathLinks(localPath, caser)
 			currentPage := directoryPage{Title: caser.String(lastPathSliceElement), Path: pathLinks, Content: content, ReadMe: readmeContent}
 
@@ -396,7 +423,6 @@ func postOrderTraversal(root string) error {
 			frontMatter, frontMatterEnd := parseFrontMatter(string(file))
 			content := getMarkdown(file[frontMatterEnd:])
 			fileOut := openOrCreateFile(removeDotMD(buildDirPath))
-
 			tags := formatTagsHTML(frontMatter.Tags)
 			articlePage := articlePage{Title: frontMatter.Title, Tags: tags, Date: frontMatter.Date, Content: content, Latex: frontMatter.Latex, Code: frontMatter.Code}
 			writeFileWithTemplate(fileOut, "./templates/art_temp.html", articlePage)
@@ -417,7 +443,7 @@ func parseFrontMatter(content string) (frontMatter, int) {
 	if content[0:3] == "---" {
 		frontMatterEnd = 3
 		for i := 3; i < len(content); i++ {
-			if content[i:i+3] == "---" {
+			if content[i:i + 3] == "---" {
 				frontMatterEnd = i + 3
 				break
 			}
@@ -443,7 +469,6 @@ func copyAssets() {
 			createDir("./build/" + file.Name())
 			dirFiles := readDir("./templates/" + file.Name())
 			for _, dirFile := range dirFiles {
-				fmt.Println(dirFile.Name())
 				assetContents := readFile("./templates/" + file.Name() + "/" + dirFile.Name())
 				fileOut := openOrCreateFile("./build/" + file.Name() + "/" + dirFile.Name())
 				writeFile(fileOut, assetContents)

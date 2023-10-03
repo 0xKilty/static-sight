@@ -1,5 +1,6 @@
 var arrowClick = function (element) {
     var orientation = element.classList[1]
+    console.log("clicked")
     if (orientation == "right") {
         element.classList.remove("right")
         element.classList.add("down")
