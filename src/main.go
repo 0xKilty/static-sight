@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"os"
 	"path/filepath"
-	"strings"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func main() {
@@ -14,6 +16,16 @@ func main() {
 	copyAssets()
 	postOrderTraversal("./content")
 	updateIndexAndTags()
+
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("(1) Rebuild (default)\n(2) Deploy\n> ")
+    name, err := reader.ReadString('\n')
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+
+    fmt.Println("Hello,", name)
 
 	os.Chdir("./build")
 
@@ -44,17 +56,6 @@ type directoryPage struct {
 	ReadMe  string
 }
 
-func getPathLinks(path string, caser cases.Caser) string {
-	var paths string
-	pathLinks := "/"
-	for _, file := range strings.Split(path, "/") {
-		cleanFile := removeDotMD(file)
-		paths += "/" + cleanFile
-		pathLinks += fmt.Sprintf("<a href=\"%s\">%s</a>/", slugify(paths), caser.String(cleanFile))
-	}
-	return pathLinks
-}
-
 func postOrderTraversal(root string) error {
 	caser := cases.Title(language.English)
 	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
@@ -64,6 +65,7 @@ func postOrderTraversal(root string) error {
 		pathSlice := splitBySlash(buildDirPath)
 		lastPathSliceElement := pathSlice[len(pathSlice)-1]
 		topDirectory := splitBySlash(localPath)[0]
+		pathLinks := getPathLinks(localPath, caser)
 		var template string
 
 		if info.IsDir() {
@@ -80,7 +82,6 @@ func postOrderTraversal(root string) error {
 				template = "note_dir_temp.html"
 			}
 			dirIndexHTML := openOrCreateFile(slugify(buildDirPath) + "/index.html")
-			pathLinks := getPathLinks(localPath, caser)
 			dirPage := directoryPage{Title: caser.String(lastPathSliceElement), Path: pathLinks, Content: content, ReadMe: readmeContent}
 			writeFileWithTemplate(dirIndexHTML, template, dirPage)
 
@@ -90,24 +91,12 @@ func postOrderTraversal(root string) error {
 		file := readFile(path)
 		fileOut := openOrCreateFile(slugify(removeDotMD(buildDirPath)))
 		var contentStruct interface{}
+		
 		if topDirectory == "blog" || topDirectory == "projects" {
-			frontMatter, frontMatterEnd := parseFrontMatter(string(file))
-			contentStruct = articlePage {
-				Title: frontMatter.Title, 
-				Path: getPathLinks(localPath, caser),
-				Tags: formatTagsHTML(frontMatter.Tags), 
-				Date: frontMatter.Date, 
-				Content: getMarkdown(file[frontMatterEnd:]), 
-				Latex: frontMatter.Latex, 
-				Code: frontMatter.Code,
-			}
+			contentStruct = getRegularPageContent(file, pathLinks)
 			template = "art_temp.html"
 		} else {
-			contentStruct = notePage {
-				Title: removeDotMD(lastPathSliceElement), 
-				Content: getMarkdown(file), 
-				FilePath: getPathLinks(localPath, caser),
-			}
+			contentStruct = getNotePageContent(file, removeDotMD(lastPathSliceElement), pathLinks)
 			template = "note_temp.html"
 		}
 		writeFileWithTemplate(fileOut, template, contentStruct)
@@ -115,8 +104,29 @@ func postOrderTraversal(root string) error {
 	})
 }
 
-func check(err error) {
-	if err != nil {
-		panic(err)
+func getRegularPageContent(file []byte, pathLinks string) (articlePage) {
+	frontMatter, frontMatterEnd := parseFrontMatter(string(file))
+	contentStruct := articlePage {
+		Title: frontMatter.Title, 
+		Path: pathLinks,
+		Tags: formatTagsHTML(frontMatter.Tags), 
+		Date: frontMatter.Date, 
+		Content: getMarkdown(file[frontMatterEnd:]), 
+		Latex: frontMatter.Latex, 
+		Code: frontMatter.Code,
 	}
+	return contentStruct
+}
+
+func getNotePageContent(file []byte, title string, pathLinks string) (notePage) {
+	contentStruct := notePage {
+		Title: title,
+		Content: getMarkdown(file), 
+		FilePath: pathLinks,
+	}
+	return contentStruct
+}
+
+func getAllDirContent() (string, string) {
+	return 
 }

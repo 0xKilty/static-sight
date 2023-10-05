@@ -32,3 +32,9 @@ func hostBuild(port string) {
 	fmt.Println("Serving site on localhost:" + port)
 	http.ListenAndServe(":"+port, nil)
 }
+
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
+}

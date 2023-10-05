@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+	"strings"
+	"golang.org/x/text/cases"
 )
 
 type articleEntry struct {
@@ -74,4 +76,15 @@ func getRegularDirPageContent(localPath string) (string, string) {
 		}
 	}
 	return content, ""
+}
+
+func getPathLinks(path string, caser cases.Caser) string {
+	var paths string
+	pathLinks := "/"
+	for _, file := range strings.Split(path, "/") {
+		cleanFile := removeDotMD(file)
+		paths += "/" + cleanFile
+		pathLinks += fmt.Sprintf("<a href=\"%s\">%s</a>/", slugify(paths), caser.String(cleanFile))
+	}
+	return pathLinks
 }
