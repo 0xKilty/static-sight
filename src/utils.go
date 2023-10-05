@@ -21,7 +21,7 @@ func copyAssets() {
 	}
 }
 
-func clearBuild() {
+func clearDir(path string) {
 	err := os.RemoveAll("./build")
 	check(err)
 	createDir("./build")
@@ -37,4 +37,11 @@ func check(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func build() {
+	clearDir("./build")
+	copyAssets()
+	postOrderTraversal("./content")
+	updateIndexAndTags()
 }

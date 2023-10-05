@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,25 +11,31 @@ import (
 )
 
 func main() {
-	clearBuild()
-	copyAssets()
-	postOrderTraversal("./content")
-	updateIndexAndTags()
+	build()
+	os.Chdir("./build")
+	localhostPort := "3000"
+	go hostBuild(localhostPort)
 
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("(1) Rebuild (default)\n(2) Deploy\n> ")
-    name, err := reader.ReadString('\n')
-    if err != nil {
-        fmt.Println("Error:", err)
-        return
-    }
-
-    fmt.Println("Hello,", name)
-
+	for {
+		fmt.Print("(1) Rebuild (default)\n(2) Deploy\n(3) Quit\n> ")
+		input, err := reader.ReadString('\n')
+		fmt.Print("\033[H\033[2J")
+		check(err)
+		if input == "1\n" || input == "" {
+			build()
+			fmt.Print("\033[H\033[2J")
+			fmt.Print("Rebuilt")
+		} else if input == "2\n" {
+			fmt.Println("Deploying")
+		} else if input == "3" {
+			fmt.Println("Quitting")
+			break
+		} else {
+			fmt.Println("Please enter either 1, 2, or 3")
+		}
+	}
 	os.Chdir("./build")
-
-	localhostPort := "3000"
-	hostBuild(localhostPort)
 }
 
 type articlePage struct {
@@ -65,16 +70,16 @@ func postOrderTraversal(root string) error {
 		pathSlice := splitBySlash(buildDirPath)
 		lastPathSliceElement := pathSlice[len(pathSlice)-1]
 		topDirectory := splitBySlash(localPath)[0]
+		inBlogOrProjects := topDirectory == "blog" || topDirectory == "projects"
 		pathLinks := getPathLinks(localPath, caser)
 		var template string
 
 		if info.IsDir() {
-			if path == root || lastPathSliceElement == "README" { return nil }
-
+			if path == root { return nil }
 			if !checkExists(buildDirPath) { createDir(slugify(buildDirPath)) }
 
 			var content, readmeContent string
-			if topDirectory == "blog" || topDirectory == "projects" {
+			if inBlogOrProjects {
 				content, readmeContent = getRegularDirPageContent(localPath)
 				template = "dir_temp.html"
 			} else {
@@ -88,45 +93,17 @@ func postOrderTraversal(root string) error {
 			return nil
 		}
 
+		if lastPathSliceElement == "README" { return nil }
 		file := readFile(path)
 		fileOut := openOrCreateFile(slugify(removeDotMD(buildDirPath)))
 		var contentStruct interface{}
-		
-		if topDirectory == "blog" || topDirectory == "projects" {
-			contentStruct = getRegularPageContent(file, pathLinks)
-			template = "art_temp.html"
+
+		if inBlogOrProjects {
+			contentStruct, template = getRegularPageContent(file, pathLinks)
 		} else {
-			contentStruct = getNotePageContent(file, removeDotMD(lastPathSliceElement), pathLinks)
-			template = "note_temp.html"
+			contentStruct, template = getNotePageContent(file, removeDotMD(lastPathSliceElement), pathLinks)
 		}
 		writeFileWithTemplate(fileOut, template, contentStruct)
 		return nil
 	})
-}
-
-func getRegularPageContent(file []byte, pathLinks string) (articlePage) {
-	frontMatter, frontMatterEnd := parseFrontMatter(string(file))
-	contentStruct := articlePage {
-		Title: frontMatter.Title, 
-		Path: pathLinks,
-		Tags: formatTagsHTML(frontMatter.Tags), 
-		Date: frontMatter.Date, 
-		Content: getMarkdown(file[frontMatterEnd:]), 
-		Latex: frontMatter.Latex, 
-		Code: frontMatter.Code,
-	}
-	return contentStruct
-}
-
-func getNotePageContent(file []byte, title string, pathLinks string) (notePage) {
-	contentStruct := notePage {
-		Title: title,
-		Content: getMarkdown(file), 
-		FilePath: pathLinks,
-	}
-	return contentStruct
-}
-
-func getAllDirContent() (string, string) {
-	return 
 }

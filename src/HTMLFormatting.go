@@ -88,3 +88,26 @@ func getPathLinks(path string, caser cases.Caser) string {
 	}
 	return pathLinks
 }
+
+func getRegularPageContent(file []byte, pathLinks string) (articlePage, string) {
+	frontMatter, frontMatterEnd := parseFrontMatter(string(file))
+	contentStruct := articlePage {
+		Title: frontMatter.Title, 
+		Path: pathLinks,
+		Tags: formatTagsHTML(frontMatter.Tags), 
+		Date: frontMatter.Date, 
+		Content: getMarkdown(file[frontMatterEnd:]), 
+		Latex: frontMatter.Latex, 
+		Code: frontMatter.Code,
+	}
+	return contentStruct, "art_temp.html"
+}
+
+func getNotePageContent(file []byte, title string, pathLinks string) (notePage, string) {
+	contentStruct := notePage {
+		Title: title,
+		Content: getMarkdown(file), 
+		FilePath: pathLinks,
+	}
+	return contentStruct, "note_temp.html"
+}
