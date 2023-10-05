@@ -1,0 +1,1 @@
+This is a collection of all my notes, some might be useful to you but most will not be. I put my notes online for people to see because if I know that someone could potentially read these notes, I want to write the of a higher quality.

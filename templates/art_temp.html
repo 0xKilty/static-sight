@@ -3,7 +3,10 @@
 
 <head>
     <title>Ian Kilty's Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/styles/style.css">
+    <script src="/scripts/toggleColor.js"></script>
+    <script>pastColor()</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -12,17 +15,16 @@
     {{ if .Latex }}
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     {{ end }}
-    {{ if .Latex }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    {{ if .Code }}
+    <link rel="stylesheet" href="/styles/dracula.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
-    <script>hljs.highlightAll();</script>
+    <script>hljs.initHighlightingOnLoad();</script>
     {{ end }}
 </head>
 
 <body>
     <main>
-        <script src="/scripts/toggleColor.js"></script>
         <h2 onclick="toggle_color()">Ian Kilty's Website</h2>
         <div class="links">
             <a href="/">Home</a>
@@ -31,6 +33,7 @@
             <a href="/notes">Notes</a>
         </div>
         <h1>{{ .Title }}</h1>
+        <p>{{ .Path }}</p>
         <p><em>{{ .Date }}</em></p>
         <p>
             Tags: {{ .Tags }}

@@ -3,7 +3,10 @@
 
 <head>
     <title>Ian Kilty's Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/styles/style.css">
+    <script src="/scripts/toggleColor.js"></script>
+    <script>pastColor()</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -13,27 +16,43 @@
 
 <body>
     <main>
-        <h1>Ian Kilty's Website</h1>
+        <h1 onclick="toggle_color()">Ian Kilty's Website</h1>
         <div class="links">
             <a href="/">Home</a>
             <a href="/blog">Blog</a>
             <a href="projects">Projects</a>
             <a href="notes">Notes</a>
         </div>
-        <p class="about">
-            I'm an undergraduate student at Colorado State University majoring in computer science concentrating
-            in cyber security and minoring in computer engineering. This webpage is home to all of the articles I
-            write such as blog posts, project posts and my notes.
-        </p>
-        <hr>
-        <h2>Recent Posts</h2>
-        <ul>
-            {{ .RecentPosts }}
-        </ul>
-        <h2>Recent Projects</h2>
-        <ul>
-            {{ .RecentProjects }}
-        </ul>
+        <article>
+            <p class="about">
+                I'm an undergraduate student at Colorado State University double majoring in comptuer
+                science with a concentration in networking and security and mathamatics with a concentration
+                in computational mathamatics and minoring in computer engineering.
+                <br><br>
+                I mainly enjoy the creativity within these subjects and the challenge to find something both useful
+                and somewhat new.
+                <br><br>
+                I'm also currently looking for an internship for the summer of 2024. Please feel free to reach
+                out to me and take a look at my resume.
+                <br><br>
+                This webpage has articles about my projects and thoughts on my blog. Please feel free
+                to reach out to me via email or by other means.
+            <ul>
+                <li><a href="https://github.com/0xKilty" target="_blank">Github</a></li>
+                <li><a href="https://www.linkedin.com/in/ian-kilty/" target="_blank">Linkedin</a></li>
+                <li><a href="mailto:iankilty1@gmail.com">Email</a></li>
+            </ul>
+            </p>
+            <hr>
+            <h2>Recent Posts</h2>
+            <ul>
+                {{ .RecentPosts }}
+            </ul>
+            <h2>Recent Projects</h2>
+            <ul>
+                {{ .RecentProjects }}
+            </ul>
+        </article>
     </main>
 </body>
 
