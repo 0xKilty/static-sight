@@ -38,8 +38,8 @@ func getTagsSting(tags []string) string {
 
 func getNotesDirPageContent(dirPath string) (string, string) {
 	var readmeContent string
-	if checkExists(dirPath + "/README.md") {
-		readmeContent = getMarkdown(readFile(dirPath + "/README.md"))
+	if checkExists("./content/" + dirPath + "/README.md") {
+		readmeContent = getMarkdown(readFile("./content/" + dirPath + "/README.md"))
 	}
 	return getFileStructureHTML(dirPath, 1), readmeContent
 }

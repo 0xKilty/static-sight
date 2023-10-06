@@ -38,6 +38,11 @@ article {
     margin-bottom: -9.2px;
 }
 
+img {
+    height: 100%;
+    width: 100%;
+}
+
 .about {
     font-size: 20px; 
     line-height: 32px; 

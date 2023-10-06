@@ -1,41 +1,19 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"os"
 	"path/filepath"
-
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
 
 func main() {
 	build()
-	os.Chdir("./build")
-	localhostPort := "3000"
-	go hostBuild(localhostPort)
 
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Print("(1) Rebuild (default)\n(2) Deploy\n(3) Quit\n> ")
-		input, err := reader.ReadString('\n')
-		fmt.Print("\033[H\033[2J")
-		check(err)
-		if input == "1\n" || input == "" {
-			build()
-			fmt.Print("\033[H\033[2J")
-			fmt.Print("Rebuilt")
-		} else if input == "2\n" {
-			fmt.Println("Deploying")
-		} else if input == "3" {
-			fmt.Println("Quitting")
-			break
-		} else {
-			fmt.Println("Please enter either 1, 2, or 3")
-		}
-	}
 	os.Chdir("./build")
+
+	localhostPort := "3000"
+	hostBuild(localhostPort)
 }
 
 type articlePage struct {
@@ -76,6 +54,7 @@ func postOrderTraversal(root string) error {
 
 		if info.IsDir() {
 			if path == root { return nil }
+
 			if !checkExists(buildDirPath) { createDir(slugify(buildDirPath)) }
 
 			var content, readmeContent string
@@ -94,6 +73,7 @@ func postOrderTraversal(root string) error {
 		}
 
 		if lastPathSliceElement == "README" { return nil }
+		
 		file := readFile(path)
 		fileOut := openOrCreateFile(slugify(removeDotMD(buildDirPath)))
 		var contentStruct interface{}
