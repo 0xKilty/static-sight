@@ -1,9 +1,9 @@
 package main
 
 import (
-	"os"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 func copyAssets() {
@@ -13,12 +13,18 @@ func copyAssets() {
 			createDir("./build/" + file.Name())
 			dirFiles := readDir("./templates/" + file.Name())
 			for _, dirFile := range dirFiles {
-				assetContents := readFile("./templates/" + file.Name() + "/" + dirFile.Name())
-				fileOut := openOrCreateFile("./build/" + file.Name() + "/" + dirFile.Name())
-				writeFile(fileOut, assetContents)
+				copyFileTemplatesToBuild(file.Name() + "/" + dirFile.Name())
 			}
+		} else if file.Name() == "resume.pdf" {
+			copyFileTemplatesToBuild(file.Name())
 		}
 	}
+}
+
+func copyFileTemplatesToBuild(fileName string) {
+	assetContents := readFile("./templates/" + fileName)
+	fileOut := openOrCreateFile("./build/" + fileName)
+	writeFile(fileOut, assetContents)
 }
 
 func clearDir(path string) {

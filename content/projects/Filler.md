@@ -2,8 +2,7 @@
 title: Filler
 date: 2/4/2023
 tags:
-  - Web
-  - Dev
+  - Web Dev
   - Rust
 ---
 ## Motivation 

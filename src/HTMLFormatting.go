@@ -17,13 +17,13 @@ type articleEntry struct {
 
 func formatRegularEntryHTML(entry articleEntry) string {
 	tags := getTagsSting(entry.Tags)
-	return fmt.Sprintf("<li><a href=\"%s\">%s</a> - <em>%s</em>&nbsp;&nbsp;<div class=\"tags\">%s</div></li>", slugify(removeDotMD(entry.FilePath)), entry.Title, entry.Date.Format("1/2/2006"), tags)
+	return fmt.Sprintf("<li><a href=\"%s\">%s</a> - <em>%s</em>&nbsp;&nbsp;<div class=\"tags\">%s</div></li>", slugify(MDtoHTML(entry.FilePath)), entry.Title, entry.Date.Format("1/2/2006"), tags)
 }
 
 func formatTagsHTML(tags []string) string {
 	var tagsString string
 	for _, tag := range tags {
-		tagsString += fmt.Sprintf("<a href=\"%s\">%s</a>&nbsp;", "/tags/" + slugify(removeDotMD(tag)), tag)
+		tagsString += fmt.Sprintf("<a href=\"%s\">%s</a>&nbsp;", "/tags/" + slugify(MDtoHTML(tag)), tag)
 	}
 	return tagsString
 }
@@ -31,7 +31,7 @@ func formatTagsHTML(tags []string) string {
 func getTagsSting(tags []string) string {
 	var tagsString string
 	for _, tag := range tags {
-		tagsString += fmt.Sprintf("<a href=\"/tags/%s\">%s</a>&nbsp;&nbsp;", slugify(removeDotMD(tag)), tag)
+		tagsString += fmt.Sprintf("<a href=\"/tags/%s\">%s</a>&nbsp;&nbsp;", slugify(MDtoHTML(tag)), tag)
 	}
 	return tagsString
 }
@@ -50,7 +50,7 @@ func getFileStructureHTML(dirPath string, depth int) string {
 	arrowPadding := strconv.Itoa(((depth - 1) * 5) + 15)
 	normalPadding := strconv.Itoa(((depth) * 5) + 15)
 	for _, item := range noteDir {
-		url := slugify("/" + dirPath + "/" + removeDotMD(item.Name()))
+		url := slugify("/" + dirPath + "/" + MDtoHTML(item.Name()))
 		if item.IsDir() {
 			content += fmt.Sprintf("<div><div class=\"dirName\"><i class=\"arrow right\" onclick=\"arrowClick(this)\"></i></div>&nbsp;<strong><a href=\"%s\">", url)
 			content += item.Name()
@@ -72,7 +72,7 @@ func getRegularDirPageContent(localPath string) (string, string) {
 		if entry.Name() != "README" {
 			file := readFile("./content/" + localPath + "/" + entry.Name())
 			frontMatter, _ := parseFrontMatter(string(file))
-			content += formatRegularEntryHTML(frontMatterToArticleEntry(frontMatter, "/"+localPath+"/"+slugify(removeDotMD(entry.Name()))))
+			content += formatRegularEntryHTML(frontMatterToArticleEntry(frontMatter, "/" + localPath + "/" + slugify(MDtoHTML(entry.Name()))))
 		}
 	}
 	return content, ""

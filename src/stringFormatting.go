@@ -9,6 +9,10 @@ func slugify(str string) string {
 	return strings.ReplaceAll(strings.ToLower(str), " ", "-")
 }
 
+func MDtoHTML(str string) string {
+	return strings.Replace(str, ".md", ".html", 1)
+}
+
 func removeDotMD(str string) string {
 	return strings.Replace(str, ".md", "", 1)
 }

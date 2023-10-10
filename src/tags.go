@@ -45,7 +45,7 @@ func addLimitConvertHtml(recentPosts []articleEntry, limit int) string {
 func getAllTags(tagsMap map[string][]articleEntry) string {
 	var allTags string
 	for tagName := range tagsMap {
-		allTags += "&nbsp;<a href=\"/tags/" + slugify(removeDotMD(tagName)) + "\">" + tagName + "</a>"
+		allTags += "&nbsp;<a href=\"/tags/" + slugify(removeDotMD(tagName)) + ".html\">" + tagName + "</a>"
 	}
 	return allTags
 }
@@ -80,7 +80,7 @@ func updateIndexAndTags() {
 
 	for tagName, tagEntries := range tagsMap {
 		tagPageContent := getTagPageContent(tagEntries)
-		tagHTMLFile := openOrCreateFile("./build/tags/" + slugify(tagName))
+		tagHTMLFile := openOrCreateFile("./build/tags/" + slugify(tagName) + ".html")
 		tagPageData := tagPage{Title: tagName, AllTags: allTags, Content: tagPageContent}
 		writeFileWithTemplate(tagHTMLFile, "tags_temp.html", tagPageData)
 	}

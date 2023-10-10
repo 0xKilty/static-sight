@@ -1,19 +1,22 @@
 package main
 
 import (
-	"os"
-	"path/filepath"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
+	"os"
+	"path/filepath"
 )
 
 func main() {
 	build()
+	if len(os.Args) == 2 {
+		if os.Args[1] == "host" {
+			os.Chdir("./build")
 
-	os.Chdir("./build")
-
-	localhostPort := "3000"
-	hostBuild(localhostPort)
+			localhostPort := "3000"
+			hostBuild(localhostPort)
+		}
+	}
 }
 
 type articlePage struct {
@@ -27,9 +30,9 @@ type articlePage struct {
 }
 
 type notePage struct {
-	Title string
+	Title    string
 	FilePath string
-	Content string
+	Content  string
 }
 
 type directoryPage struct {
@@ -53,9 +56,13 @@ func postOrderTraversal(root string) error {
 		var template string
 
 		if info.IsDir() {
-			if path == root { return nil }
+			if path == root {
+				return nil
+			}
 
-			if !checkExists(buildDirPath) { createDir(slugify(buildDirPath)) }
+			if !checkExists(buildDirPath) {
+				createDir(slugify(buildDirPath))
+			}
 
 			var content, readmeContent string
 			if inBlogOrProjects {
@@ -72,10 +79,12 @@ func postOrderTraversal(root string) error {
 			return nil
 		}
 
-		if lastPathSliceElement == "README" { return nil }
-		
+		if lastPathSliceElement == "README" {
+			return nil
+		}
+
 		file := readFile(path)
-		fileOut := openOrCreateFile(slugify(removeDotMD(buildDirPath)))
+		fileOut := openOrCreateFile(slugify(MDtoHTML(buildDirPath)))
 		var contentStruct interface{}
 
 		if inBlogOrProjects {
