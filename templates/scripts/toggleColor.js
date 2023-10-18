@@ -20,9 +20,3 @@ var setColor = (bool) => {
     root.style.setProperty('--text-color', newColors[1]);
     root.style.setProperty('--hljs-background', newColors[2]);
 }
-
-/*
-window.addEventListener('DOMContentLoaded', function () {
-    pastColor()
-});
-*/

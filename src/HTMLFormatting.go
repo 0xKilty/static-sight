@@ -23,7 +23,7 @@ func formatRegularEntryHTML(entry articleEntry) string {
 func formatTagsHTML(tags []string) string {
 	var tagsString string
 	for _, tag := range tags {
-		tagsString += fmt.Sprintf("<a href=\"%s\">%s</a>&nbsp;", "/tags/" + slugify(MDtoHTML(tag)), tag)
+		tagsString += fmt.Sprintf("<a href=\"%s\">%s</a>&nbsp;", "/tags/" + slugify(tag) + ".html", tag)
 	}
 	return tagsString
 }
@@ -31,7 +31,7 @@ func formatTagsHTML(tags []string) string {
 func getTagsSting(tags []string) string {
 	var tagsString string
 	for _, tag := range tags {
-		tagsString += fmt.Sprintf("<a href=\"/tags/%s\">%s</a>&nbsp;&nbsp;", slugify(MDtoHTML(tag)), tag)
+		tagsString += fmt.Sprintf("<a href=\"/tags/%s\">%s</a>&nbsp;&nbsp;", slugify(tag) + ".html", tag)
 	}
 	return tagsString
 }
