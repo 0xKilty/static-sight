@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ian Kilty's Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/pictures/favicon.ico">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/dark_light_mode.js"></script>
+    <script>past_color()</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400;1,8..60,500;1,8..60,600&family=VT323&display=swap"
+        rel="stylesheet">
+    
+    
+</head>
+
+<body>
+    <main>
+        <h1>Ian Kilty's Website</h1>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/resume.pdf" target="_blank">Resume</a>
+            <a href="https://github.com/0xKilty" target="_blank">Github</a>
+            <a href="https://www.linkedin.com/in/ian-kilty/" target="_blank">Linkedin</a>
+            <a href="javascript:void(0);" class="color_mode" onclick="toggle_color()">Dark</a>
+        </div>
+        <article>
+            <h1>Filler</h1>
+
+<em>2/4/2023</em>
+
+<p><p><a href="https://0xkilty.github.io/filler/">Play filler here!</a></p>
+
+<h2>Motivation</h2>
+
+<p>Filler is one of my favorite games, the simplicity but also the small chance for very deep complexity. Whenever I looked online to play filler, I couldn&rsquo;t find any websites that provided a the game. So I decided to make one.</p>
+
+<h3>How it works</h3>
+
+<p>At the start of the game, each player has a square in the bottom left or top right corner. Becoming a color of a square means that the player captures that square. The game ends when all the squares have been captured and the winner is the player with the most squares.</p>
+
+<h2>Development</h2>
+
+<p>To build the website, I used <a href="https://reactjs.org/">React JS</a>, and to build the computer the player can play against, I used <a href="https://webassembly.org/">webassembly</a>. I wanted to use webassembly because I wanted the algorithm to be fast with the minimal cost of computation. I used Rust to build the algorithm, properly named <em>Phil</em>.</p>
+
+<h3>Algorithm</h3>
+
+<p>The algorithm is goes by a <a href="https://en.wikipedia.org/wiki/Brute-force_search">brute force</a> method meaning it tries every color that it is currently touching at a depth of 8.
+This means that it looks 8 moves ahead and picks the move that would get it the most territory after 8 moves. This also includes capturing squares by blocking the opponent off from them.
+This is checked by doing a <a href="https://en.wikipedia.org/wiki/Breadth-first_search">breath-first search</a> whenever a square is captured that may be blocked off by the opponent. For instance, lets say a square is captured on the edge of the board and the squares adjacent to it are not already captured by the player. The algorithm then does a breadth-first search to see if it can path to an opponents square and if not, the number of squares that can&rsquo;t path to an opponents square are counted in the score. The blocked off squares are not shown in the actual score, rather, taken into account in the algorithm when choosing the next move.</p>
+
+<h3>Algorithmic Flaws</h3>
+
+<p>There are many flaws in the algorithm. A better way to go about this would probably be to use a machine learning approach, but a straight forward simple algorithm was mainly what I was looking for.
+Brute force is not the best way to go about this, but either it was either brute force or a machine learning model. A dynamic programming approach would have not worked all that well because in order to implment it, the algorithm would have been more accurate, but the time complexity would have been very exponential. You see, with every move, the board changes, so to implement a dynaimc programming approach, you would have to calculate everyone of your move combinations and with everyone of those combinations, you would have to calculate everyone of your move combinations based on the opponents move.
+I wanted the algorithm to be fast so I did not implment this dynamic programming approach even though it is interesting. In the future I am thinking of implementing a machine learning model which would be intersting because the colors on the board are generated randomly causing one player to almost always have an advantage over another.
+Finding this advantage is what makes filler fun.</p>
+
+<h2>Conclusion</h2>
+
+<p>This was a very fun project to work on as I can finally play filler on a website! Creating Phil was also very fun, although there are still many flaws in the algorithm, it was intersting to use webassembly and I think I will be using webassembly in future projects. Overall a this was a very interesting project and I hope you can enjoy filler as much as I do.</p>
+</p>
+        </article>
+        <br>
+        <hr>
+        <footer>
+            <a href="#top">Back to the top</a>
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/resume.pdf" target="_blank">Resume</a>
+            <a href="https://github.com/0xKilty" target="_blank">Github</a>
+            <a href="https://www.linkedin.com/in/ian-kilty/" target="_blank">Linkedin</a>
+            <a href="javascript:void(0);" class="color_mode" onclick="toggle_color()">Dark</a>
+        </footer>
+    </main>
+</body>
+
+</html>

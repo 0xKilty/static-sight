@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ian Kilty's Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/pictures/favicon.ico">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/dark_light_mode.js"></script>
+    <script>past_color()</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400;1,8..60,500;1,8..60,600&family=VT323&display=swap"
+        rel="stylesheet">
+    
+    
+</head>
+
+<body>
+    <main>
+        <h1>Ian Kilty's Website</h1>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/resume.pdf" target="_blank">Resume</a>
+            <a href="https://github.com/0xKilty" target="_blank">Github</a>
+            <a href="https://www.linkedin.com/in/ian-kilty/" target="_blank">Linkedin</a>
+            <a href="javascript:void(0);" class="color_mode" onclick="toggle_color()">Dark</a>
+        </div>
+        <article>
+            <h1>Patricoin</h1>
+
+<em>1/15/2023</em>
+
+<p><h2>Motivation</h2>
+
+<p>Patricoin is an <a href="https://eips.ethereum.org/EIPS/eip-777">ERC-777 token</a> that I made to further understand crypto currency and smart contracts.
+I named the project/token, &ldquo;Patricoin&rdquo; because one of my friends name is Patrick and to poke at the fact that almost all crypto currencies are named after something with the word <code>coin</code> mixed in somewhere.
+What sparked my interest in learning more about crypto currencies was a presentation by <a href="https://github.com/0xJepsen">Waylon Jepsen</a> on crypto <a href="https://en.wikipedia.org/wiki/Arbitrage">arbitrage</a>.</p>
+
+<h2>Creation</h2>
+
+<h3>ERC-777 Standard</h3>
+
+<p>The ordinary standard tokens are upheld to are ERC-20 which include a list of <a href="https://ethereum.org/en/developers/docs/standards/tokens/erc-20/#methods">functions</a> that the token must implement. An ERC-777 token is backwards compatible with an ERC-20 token but adds a few new features such as <a href="https://ethereum.org/en/developers/docs/standards/tokens/erc-777/#hooks">hooks</a>.</p>
+
+<h3>Tools</h3>
+
+<p>To actually develop the token, I used an ethereum development tool chain called <a href="https://hardhat.org/">hardhat</a>. Hardhat is an amazing tool for the creation of the smart contract and the deployment.
+To protect against token vulnerabilities, such as a <a href="https://hackernoon.com/hack-solidity-reentrancy-attack">reentrancy attack</a>, and to speed up the development process, I used <a href="https://www.openzeppelin.com/">OpenZepplin</a> which is a library for developing smart contracts in solidity. This can protect against re-entrancy attacks because of the wide use of OpenZepplin and the thousands of contributers to the project.</p>
+
+<h2>Deployment</h2>
+
+<h3>Goelri Testnet</h3>
+
+<p>Using hardhat, I deployed the token on the <a href="https://goerli.net/">Goelri testnet</a> which is a testnet on the ethereum blockchain. A testnet is network separate from the real network of a crypto currency (in this case ethereum), so that developers of these smart contracts can test their deployment. I choose to not deploy Patricoin on the real network because it was made just for fun and it costs money to deploy it. Since the blockchain is visible to anyone, here is the <a href="https://goerli.etherscan.io/token/0xb5e499390d8cef2a6a76158963205d8d18e71df7#code">final deployment</a> on the blockchain.</p>
+
+<h3>Uniswap Pool</h3>
+
+<p><a href="https://uniswap.org/">Uniswap</a> is a DEX or a Decentralized Exchange meaning you can buy and sell crypto currency directly from other people. To build a liquidity pool for patricoin, I used uniswap to put in some Goelri Testnet ETH into a liquidity pool for patricoin so that it could be worth some fake money and I could derive a price. To view this liquidity pool, make sure you have Goelri Testnet selected on the uniswap website, <a href="https://app.uniswap.org/#/pool/45776">Pool</a>.</p>
+
+<h2>Creating the website</h2>
+
+<p>I thought it would be a fun idea to sharpen my react skills and learn about web3 to build a <a href="https://0xkilty.github.io/patricoin/">website</a> surrounding patricoin. I used <a href="https://docs.ethers.io/v5/|ethers.js">ethers.js</a> and <a href="https://docs.uniswap.org/sdk/v3/overview">uniswap v3 sdk</a> for the development and connection to the blockchain along with Metamask compatibility.</p>
+
+<h2>Conclusion</h2>
+
+<p>I enjoyed the process of creating patricoin and the <a href="https://0xkilty.github.io/patricoin/">website</a> to go along with it. I also learned about the fine details of blockchain and about web3. Even though there wasn&rsquo;t much room for creativity within the token (because my economic knowledge is limited), I still felt that I learned a lot and about how other tokens on the blockchain function.</p>
+</p>
+        </article>
+        <br>
+        <hr>
+        <footer>
+            <a href="#top">Back to the top</a>
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/resume.pdf" target="_blank">Resume</a>
+            <a href="https://github.com/0xKilty" target="_blank">Github</a>
+            <a href="https://www.linkedin.com/in/ian-kilty/" target="_blank">Linkedin</a>
+            <a href="javascript:void(0);" class="color_mode" onclick="toggle_color()">Dark</a>
+        </footer>
+    </main>
+</body>
+
+</html>

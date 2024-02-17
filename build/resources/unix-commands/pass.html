@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ian Kilty's Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/pictures/favicon.ico">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/dark_light_mode.js"></script>
+    <script>past_color()</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400;1,8..60,500;1,8..60,600&family=VT323&display=swap"
+        rel="stylesheet">
+    
+    
+</head>
+
+<body>
+    <main>
+        <h1>Ian Kilty's Website</h1>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/resume.pdf" target="_blank">Resume</a>
+            <a href="https://github.com/0xKilty" target="_blank">Github</a>
+            <a href="https://www.linkedin.com/in/ian-kilty/" target="_blank">Linkedin</a>
+            <a href="javascript:void(0);" class="color_mode" onclick="toggle_color()">Dark</a>
+        </div>
+        <article>
+            <h1>pass</h1>
+
+<p><p>Pass works with gpg keys to encrypt a file with all your passwords in it.</p>
+
+<p>gpg keys are tied to an email address that works with pass.</p>
+
+<p>Generate a gpg key</p>
+
+<pre><code>gpg --full-gen-key
+</code></pre>
+
+<p>I usually just pick the default RSA and RSA with 4096 bits long and never expires.</p>
+
+<p>It will prompt you to input a name and email, these no not have to be real.</p>
+
+<p>Then it will ask for your master password, remember this one as this unlocks all the other passwords from the gpg key.</p>
+
+<p>List all your gpg keys</p>
+
+<pre><code>gpg -k
+</code></pre>
+
+<p>Initialize pass</p>
+
+<pre><code>pass init &lt;email address&gt;
+</code></pre>
+
+<p>Add a password entry</p>
+
+<pre><code>pass add &lt;entry&gt;
+pass add email
+</code></pre>
+
+<p>View all the titles for your passwords</p>
+
+<pre><code>pass
+pass ls 
+</code></pre>
+
+<p>View a password entry</p>
+
+<pre><code>pass &lt;entry&gt;
+pass email
+</code></pre>
+
+<p>This will prompt you for your master password, then display the password for the entry.</p>
+</p>
+        </article>
+        <br>
+        <hr>
+        <footer>
+            <a href="#top">Back to the top</a>
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/resume.pdf" target="_blank">Resume</a>
+            <a href="https://github.com/0xKilty" target="_blank">Github</a>
+            <a href="https://www.linkedin.com/in/ian-kilty/" target="_blank">Linkedin</a>
+            <a href="javascript:void(0);" class="color_mode" onclick="toggle_color()">Dark</a>
+        </footer>
+    </main>
+</body>
+
+</html>
